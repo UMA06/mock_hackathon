@@ -1,0 +1,83 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+public class Main {
+
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		JSONObject obj=new JSONObject();
+		JSONObject obj1=new JSONObject();
+		File file = new File("C:\\\\Users\\Dell\\Desktop\\NFT\\memory.txt");
+
+
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		ArrayList<Double> ar=new ArrayList<Double>();
+		String s;
+		while ((s = br.readLine()) != null) {
+			int count = 0;
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (count % 2 == 0) {
+					// do something with this line
+					String sub=line.substring(21,30).trim();
+					int num=Integer.parseInt(sub);
+					double m = num/1024.0;
+					//System.out.println(m);
+				    DecimalFormat dec = new DecimalFormat("0.00");
+				   String mb = null;
+					if (m > 1) {
+				        mb = dec.format(m);
+				    }
+					ar.add(Double.parseDouble(mb));
+					
+				}
+				++count;
+			}
+
+
+		}
+		Double sum=0.0;
+		for(Double d:ar)
+		{
+			try {
+				obj1.put(d+"s",d);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			sum=sum+d;
+		}
+		double avg=sum/ar.size();
+		System.out.println("AverageMemory(MB)"+avg);
+		System.out.println("MaxMemory(MB)"+Collections.max(ar));
+		  DecimalFormat df = new DecimalFormat("0.00");
+		df.setRoundingMode(RoundingMode.CEILING);
+		try {
+			obj.put("AverageMemory(MB)",df.format(avg));
+			obj.put("Values:",obj1);
+			obj.put("MaxMemory(MB)",df.format(Collections.max(ar)));
+			System.out.println(obj);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+
+}
